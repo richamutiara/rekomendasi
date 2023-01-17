@@ -1,18 +1,53 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Carousel from "react-bootstrap/Carousel";
-import Form from "react-bootstrap/Form";
+import { Form, Container, Row, Col, Carousel, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import vespaImage from "../assets/vespa.jpg";
-import { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 
 function OptionPage() {
+  const [price, setPrice] = useState(0);
+  const [amenity, setAmenity] = useState("SL");
+  const [location, setLocation] = useState("");
+
   return (
     <Container>
       <Row>
+        <div className="d-flex">
+          <Form.Group className="mb-2">
+            <Form.Label>Lokasi</Form.Label>
+            <Form.Select
+              aria-label="Lokasi"
+              onChange={(e) => setLocation(e.target.value)}
+            >
+              <option value="Kuta">Kuta</option>
+              <option value="Kuta Selatan">Kuta Selatan</option>
+              <option value="Kuta Utara">Kuta Utara</option>
+              <option value="Mengwi">Mengwi</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-2">
+            <Form.Label>Lokasi</Form.Label>
+            <Form.Select
+              aria-label="Lokasi"
+              onChange={(e) => setLocation(e.target.value)}
+            >
+              <option value="Kuta">Kuta</option>
+              <option value="Kuta Selatan">Kuta Selatan</option>
+              <option value="Kuta Utara">Kuta Utara</option>
+              <option value="Mengwi">Mengwi</option>
+            </Form.Select>
+          </Form.Group>{" "}
+          <Form.Group className="mb-2">
+            <Form.Label>Lokasi</Form.Label>
+            <Form.Select
+              aria-label="Lokasi"
+              onChange={(e) => setLocation(e.target.value)}
+            >
+              <option value="Kuta">Kuta</option>
+              <option value="Kuta Selatan">Kuta Selatan</option>
+              <option value="Kuta Utara">Kuta Utara</option>
+              <option value="Mengwi">Mengwi</option>
+            </Form.Select>
+          </Form.Group>
+        </div>
         <Col>
           <div className="d-flex align-items-center min-vh-100">
             <Carousel fade>
@@ -43,82 +78,69 @@ function OptionPage() {
         <Col md={{ span: 5, offset: 1 }}>
           <div className="d-flex align-items-center min-vh-100">
             <div>
-              <div>
-                <Form.Label>Harga</Form.Label>
-                <br />
-                <div className="d-flex flex-row mb-3">
-                  <Form.Control size="sm" type="text" placeholder="0" />
-                  {"-"}
-                  <Form.Control size="sm" type="text" placeholder="" />
-                </div>
-              </div>
               <Form>
-                <Form.Label>Fasilitas</Form.Label>
-                {["checkbox"].map((type) => (
-                  <div key={`default-${type}`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label="Helm"
-                      name="helm"
-                      type={type}
-                      id={`inline-${type}-helm`}
-                    />
-                    <Form.Check
-                      inline
-                      label="Jas Hujan"
-                      name="jas"
-                      type={type}
-                      id={`inline-${type}-jas`}
-                    />
-                    <Form.Check
-                      name="rack"
-                      type={type}
-                      id={`default-${type}-rack`}
-                      label="Motorcycle Surfboard Rack"
-                    />
-                    <Form.Check
-                      name="layanan"
-                      type={type}
-                      id={`default-${type}-layanan`}
-                      label="Layanan Antar Jemput"
+                <Form.Group>
+                  <Form.Label>Harga Maksimal</Form.Label>
+                  <div className="d-flex flex-row mb-3">
+                    <Form.Control
+                      size="sm"
+                      type="tel"
+                      min={0}
+                      max={1000000}
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
                     />
                   </div>
-                ))}
-              </Form>
-              {/* <div>
-                <Form.Label>Jarak</Form.Label>
-                <br />
-                <div className="d-flex flex-row mb-3">
-                  <Form.Control size="sm" type="text" placeholder="0" />
-                  {"-"}
-                  <Form.Control size="sm" type="text" placeholder="" />
-                </div>
-              </div> */}
-              <div>
-                <Dropdown>
+                </Form.Group>
+                <Form.Label>Fasilitas</Form.Label>
+                <Form.Check
+                  type="radio"
+                  id="sangat-lengkap"
+                  name="amenities"
+                  label="Sangat Lengkap"
+                  value="SL"
+                  defaultChecked
+                  onClick={(e) => setAmenity(e.target.value)}
+                />
+                <Form.Check
+                  type="radio"
+                  id="lengkap"
+                  name="amenities"
+                  label="Lengkap"
+                  value="L"
+                  onClick={(e) => setAmenity(e.target.value)}
+                />
+                <Form.Check
+                  type="radio"
+                  id="tidak-lengkap"
+                  name="amenities"
+                  label="Tidak Lengkap"
+                  value="TL"
+                  onClick={(e) => setAmenity(e.target.value)}
+                />
+                <Form.Check
+                  type="radio"
+                  id="tidak-ada"
+                  name="amenities"
+                  label="Tidak Ada"
+                  value="TA"
+                  onClick={(e) => setAmenity(e.target.value)}
+                />
+                <Form.Group className="mb-2">
                   <Form.Label>Lokasi</Form.Label>
-                  <br />
-                  <Dropdown.Toggle
-                    id="dropdown-button-dark-example1"
-                    variant="secondary"
+                  <Form.Select
+                    aria-label="Lokasi"
+                    onChange={(e) => setLocation(e.target.value)}
                   >
-                    Pilih Lokasi
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu variant="dark">
-                    <Dropdown.Item href="#/action-2">Kuta</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">
-                      Kuta Selatan
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Kuta Utara</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Mengwi</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-              <br />
-              <div>
+                    <option value="Kuta">Kuta</option>
+                    <option value="Kuta Selatan">Kuta Selatan</option>
+                    <option value="Kuta Utara">Kuta Utara</option>
+                    <option value="Mengwi">Mengwi</option>
+                  </Form.Select>
+                </Form.Group>
                 <Button variant="primary" size="sm">
-                  Save
-                </Button>{" "}
+                  Cari
+                </Button>
                 <Button
                   as="input"
                   type="reset"
@@ -126,7 +148,7 @@ function OptionPage() {
                   size="sm"
                   variant="danger"
                 />
-              </div>
+              </Form>
             </div>
           </div>
         </Col>
