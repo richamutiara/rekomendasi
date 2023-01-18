@@ -4,11 +4,11 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Carousel from "react-bootstrap/Carousel";
 import Form from "react-bootstrap/Form";
-import vespaImage from "../assets/vespa.jpg";
 import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import vespaImage from "../assets/vespa.jpg";
 
+///ga di pake
 function HomePage() {
   return (
     <Container>

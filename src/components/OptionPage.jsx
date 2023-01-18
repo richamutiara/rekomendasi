@@ -8,48 +8,45 @@ function OptionPage() {
   const [location, setLocation] = useState("");
 
   return (
-    <Container>
+    <Container className="min-vh-100">
       <Row>
-        <div className="d-flex">
+        <div className="p-5 gap-4 d-flex justify-content-center">
           <Form.Group className="mb-2">
-            <Form.Label>Lokasi</Form.Label>
+            <Form.Label>Prioritas 1</Form.Label>
             <Form.Select
               aria-label="Lokasi"
               onChange={(e) => setLocation(e.target.value)}
             >
-              <option value="Kuta">Kuta</option>
-              <option value="Kuta Selatan">Kuta Selatan</option>
-              <option value="Kuta Utara">Kuta Utara</option>
-              <option value="Mengwi">Mengwi</option>
+              <option value="Kuta">Harga</option>
+              <option value="Kuta Selatan">Fasilitas</option>
+              <option value="Kuta Utara">Lokasi</option>
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-2">
-            <Form.Label>Lokasi</Form.Label>
+            <Form.Label>Prioritas 2</Form.Label>
             <Form.Select
               aria-label="Lokasi"
               onChange={(e) => setLocation(e.target.value)}
             >
-              <option value="Kuta">Kuta</option>
-              <option value="Kuta Selatan">Kuta Selatan</option>
-              <option value="Kuta Utara">Kuta Utara</option>
-              <option value="Mengwi">Mengwi</option>
+              <option value="Kuta">Harga</option>
+              <option value="Kuta Selatan">Fasilitas</option>
+              <option value="Kuta Utara">Lokasi</option>
             </Form.Select>
-          </Form.Group>{" "}
+          </Form.Group>
           <Form.Group className="mb-2">
-            <Form.Label>Lokasi</Form.Label>
+            <Form.Label>Prioritas 3</Form.Label>
             <Form.Select
               aria-label="Lokasi"
               onChange={(e) => setLocation(e.target.value)}
             >
-              <option value="Kuta">Kuta</option>
-              <option value="Kuta Selatan">Kuta Selatan</option>
-              <option value="Kuta Utara">Kuta Utara</option>
-              <option value="Mengwi">Mengwi</option>
+              <option value="Kuta">Harga</option>
+              <option value="Kuta Selatan">Fasilitas</option>
+              <option value="Kuta Utara">Lokasi</option>
             </Form.Select>
           </Form.Group>
         </div>
         <Col>
-          <div className="d-flex align-items-center min-vh-100">
+          <div className="d-flex align-items-center ">
             <Carousel fade>
               <Carousel.Item>
                 <img
@@ -76,7 +73,7 @@ function OptionPage() {
           </div>
         </Col>
         <Col md={{ span: 5, offset: 1 }}>
-          <div className="d-flex align-items-center min-vh-100">
+          <div className="d-flex align-items-center">
             <div>
               <Form>
                 <Form.Group>
