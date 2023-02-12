@@ -15,7 +15,7 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react-hooks/exhaustive-deps": "warn",
-
+    "jsx-a11y/label-has-associated-control": ["error", { "assert": "either" }],
     "no-param-reassign": [
       "error",
       { "props": true, "ignorePropertyModificationsFor": ["draft"] }
@@ -34,6 +34,7 @@
         "selector": "WithStatement",
         "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
       }
-    ]
+    ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   }
 }
