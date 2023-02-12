@@ -1,0 +1,61 @@
+.form-control {
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.radio-control {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.radio {
+  position: relative;
+}
+
+.radio input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.radio label {
+  border: 1px solid black;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.radio input[type="radio"]:is(:checked, :hover, :focus) + label {
+  color: white;
+  background-color: black;
+}
+
+.submit-button {
+  padding: 0.5rem;
+  display: block;
+  border-radius: 8px;
+  margin-inline: auto;
+}
+
+legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+fieldset {
+  margin-bottom: 0.7rem;
+}
