@@ -5,6 +5,7 @@ import OptionPage from "./components/options/OptionPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavHeader from "./components/NavHeader";
 import ErrorPage from "./components/error/ErrorPage";
+import AdminPage from "./components/admin/AdminPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         element: <OptionPage />,
       },
     ],
+  },
+  {
+    path: "admin",
+    element: <AdminPage />,
   },
 ]);
 
