@@ -1,0 +1,26 @@
+.detail-card {
+  width: 60%;
+  aspect-ratio: 1 /1;
+  max-width: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.detail-card h1 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+section.detail {
+  padding-inline: 1rem;
+}
+
+section.detail * {
+  margin-block: 0.5rem;
+}
