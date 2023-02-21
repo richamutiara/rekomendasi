@@ -3,9 +3,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import vespaImage from "../assets/vespa.jpg";
+import vespaImage from "../../assets/vespa.jpg";
 
-function MainPage() {
+function SearchPage() {
   return (
     <Container fluid="md">
       <Row>
@@ -99,4 +99,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default SearchPage;

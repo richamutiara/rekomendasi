@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavHeader from "./components/NavHeader";
 import ErrorPage from "./components/error/ErrorPage";
 import AdminPage from "./components/admin/AdminPage";
+import DetailPage from "./components/rental/DetailPage";
+import SearchPage from "./components/search/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <OptionPage />,
+      },
+      {
+        path: "/detail/:id",
+        element: <DetailPage />,
+      },
+      {
+        path: "search-results",
+        element: <SearchPage />,
       },
     ],
   },
