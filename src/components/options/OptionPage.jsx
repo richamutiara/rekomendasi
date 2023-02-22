@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import { Form, Container, Row, Col, Carousel, Button } from "react-bootstrap";
-import { useState, useReducer } from "react";
+import { useState, useReducer, useMemo } from "react";
 import produce from "immer";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import vespaImage from "../../assets/vespa.jpg";
 import { db } from "../../../firebase";
 
@@ -78,7 +79,12 @@ async function getRentalData({ priceLimit, location, facility }) {
     const snapshots = await getDocs(q);
     const resArray = [];
     snapshots.forEach((rentalSnap) => {
-      resArray.push(rentalSnap.data());
+      const data = rentalSnap.data();
+      const dataWithId = {
+        ...data,
+        id: rentalSnap.id,
+      };
+      resArray.push(dataWithId);
     });
     return resArray;
   } catch (error) {
@@ -94,55 +100,10 @@ function countCriteria(priorities) {
     location: ahpLocation,
   } = parsedPriorities;
 
-  let q1b;
-  if (ahpPrice === 7 && ahpFacility === 3) {
-    q1b = 7;
-  } else if (ahpPrice === 7 && ahpFacility === 5) {
-    q1b = 5;
-  } else if (ahpPrice === 5 && ahpFacility === 3) {
-    q1b = 3;
-  } else if (ahpFacility === 7 && ahpPrice === 3) {
-    q1b = 1 / 7;
-  } else if (ahpFacility === 7 && ahpPrice === 5) {
-    q1b = 1 / 5;
-  } else {
-    q1b = 1 / 3;
-  }
-
-  let q2b;
-  if (ahpPrice === 7 && ahpLocation === 3) {
-    q2b = 7;
-  } else if (ahpPrice === 7 && ahpLocation === 5) {
-    q2b = 5;
-  } else if (ahpPrice === 5 && ahpLocation === 3) {
-    q2b = 3;
-  } else if (ahpLocation === 5 && ahpPrice === 3) {
-    q2b = 1 / 3;
-  } else if (ahpLocation === 7 && ahpPrice === 3) {
-    q2b = 1 / 7;
-  } else if (ahpLocation === 7 && ahpPrice === 5) {
-    q2b = 1 / 5;
-  }
-
-  let q3b;
-  if (ahpFacility === 7 && ahpLocation === 3) {
-    q3b = 7;
-  } else if (ahpFacility === 7 && ahpLocation === 5) {
-    q3b = 5;
-  } else if (ahpFacility === 5 && ahpLocation === 3) {
-    q3b = 3;
-  } else if (ahpLocation === 5 && ahpFacility === 3) {
-    q3b = 1 / 3;
-  } else if (ahpLocation === 7 && ahpFacility === 3) {
-    q3b = 1 / 7;
-  } else if (ahpLocation === 7 && ahpFacility === 5) {
-    q3b = 1 / 5;
-  }
-
   const matrix = [
-    [1, q1b, q2b],
-    [1 / q1b, 1, q3b],
-    [1 / q2b, 1 / q3b, 1],
+    [1, ahpPrice / ahpFacility, ahpPrice / ahpLocation],
+    [ahpFacility / ahpPrice, 1, ahpFacility / ahpLocation],
+    [ahpLocation / ahpPrice, ahpLocation / ahpFacility, 1],
   ];
 
   // pushing the total into the matrix;
@@ -152,11 +113,7 @@ function countCriteria(priorities) {
     matrix[0][2] + matrix[1][2] + matrix[2][2],
   ]);
 
-  const totalCriteria = [
-    matrix[0][0] + matrix[1][0] + matrix[2][0],
-    matrix[0][1] + matrix[1][1] + matrix[2][1],
-    matrix[0][2] + matrix[1][2] + matrix[2][2],
-  ];
+  const totalCriteria = matrix[3];
 
   const vektorEigen = [
     [
@@ -240,8 +197,20 @@ function OptionPage() {
     initialPriorityState
   );
 
+  const navigate = useNavigate();
+
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (
+      !priorities.price ||
+      !priorities.facility ||
+      !priorities.location ||
+      !price
+    ) {
+      // eslint-disable-next-line no-alert
+      alert("Tolong isikan data dengan benar");
+      return;
+    }
     const vektorEigen = countCriteria(priorities);
 
     const data = await getRentalData({
@@ -298,9 +267,15 @@ function OptionPage() {
     );
 
     finalData.sort((dataA, dataB) => dataB.rankingWeight - dataA.rankingWeight);
+    navigate("search-results", {
+      state: finalData,
+    });
   };
 
-  const priorityList = ["7", "5", "3"];
+  const priorityList = useMemo(
+    () => ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    []
+  );
 
   const handleFirstPrio = (e) => {
     dispatch({
