@@ -6,6 +6,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import vespaImage from "../../assets/vespa.jpg";
 import { db } from "../../../firebase";
+import DiscreteSlider from "./DiscreteSlider";
 
 const SET_FIRST = "SET_PRICE";
 const SET_SECOND = "SET_FACILITY";
@@ -82,46 +83,40 @@ async function getRentalData({ priceLimit, location, facility }) {
   }
 }
 
-function countCriteria(priorities) {
-  let ahpPrice;
-  let ahpFacility;
-  let ahpLocation;
+function countCriteria(priceFacility, priceLocation, facilityLocation) {
+  let q2;
+  let q3;
+  let q6;
 
-  if (priorities.first === "Harga") {
-    ahpPrice = 9;
-  }
-  if (priorities.first === "Fasilitas") {
-    ahpFacility = 9;
-  }
-  if (priorities.first === "Lokasi") {
-    ahpLocation = 9;
+  if (priceFacility < 0) {
+    q2 = Math.abs(priceFacility);
+  } else {
+    q2 = 1 / priceFacility;
   }
 
-  if (priorities.second === "Harga") {
-    ahpPrice = 5;
-  }
-  if (priorities.second === "Fasilitas") {
-    ahpFacility = 5;
-  }
-  if (priorities.second === "Lokasi") {
-    ahpLocation = 5;
+  if (priceLocation < 0) {
+    q3 = Math.abs(priceLocation);
+  } else {
+    q3 = 1 / priceLocation;
   }
 
-  if (priorities.third === "Harga") {
-    ahpPrice = 3;
+  if (facilityLocation < 0) {
+    q6 = Math.abs(facilityLocation);
+  } else {
+    q6 = 1 / facilityLocation;
   }
-  if (priorities.third === "Fasilitas") {
-    ahpFacility = 3;
-  }
-  if (priorities.third === "Lokasi") {
-    ahpLocation = 3;
-  }
+
+  const q4 = 1 / q2;
+  const q7 = 1 / q3;
+  const q8 = 1 / q6;
 
   const matrix = [
-    [1, ahpPrice / ahpFacility, ahpPrice / ahpLocation],
-    [ahpFacility / ahpPrice, 1, ahpFacility / ahpLocation],
-    [ahpLocation / ahpPrice, ahpLocation / ahpFacility, 1],
+    [1, q2, q3],
+    [q4, 1, q6],
+    [q7, q8, 1],
   ];
+
+  console.table(matrix);
 
   // pushing the total into the matrix;
   matrix.push([
@@ -214,21 +209,24 @@ function OptionPage() {
     initialPriorityState
   );
 
+  const [priceFacility, setpriceFacility] = useState(-5);
+  const [priceLocation, setPriceLocation] = useState(-7);
+  const [facilityLocation, setFacilityLocation] = useState(-3);
+
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (
-      !priorities.first ||
-      !priorities.second ||
-      !priorities.third ||
-      !price
-    ) {
+    if (!priceFacility || !priceLocation || !facilityLocation || !price) {
       // eslint-disable-next-line no-alert
       alert("Tolong isikan data dengan benar");
       return;
     }
-    const vektorEigen = countCriteria(priorities);
+    const vektorEigen = countCriteria(
+      priceFacility,
+      priceLocation,
+      facilityLocation
+    );
 
     const data = await getRentalData({
       priceLimit: price,
@@ -284,6 +282,7 @@ function OptionPage() {
     );
 
     finalData.sort((dataA, dataB) => dataB.rankingWeight - dataA.rankingWeight);
+    console.log(finalData);
 
     navigate("search-results", {
       state: finalData,
@@ -313,6 +312,22 @@ function OptionPage() {
 
   return (
     <Container className="min-vh-100">
+      <DiscreteSlider
+        onChange={(e) => setpriceFacility(e.target.value)}
+        left="Harga"
+        right="Fasilitas"
+      />
+      <DiscreteSlider
+        onChange={(e) => setPriceLocation(e.target.value)}
+        left="Harga"
+        right="Lokasi"
+      />
+      <DiscreteSlider
+        onChange={(e) => setFacilityLocation(e.target.value)}
+        left="Fasilitas"
+        right="Lokasi"
+      />
+
       <Row>
         <div className="p-5 gap-4 d-flex justify-content-center">
           <Form.Group className="mb-2">
