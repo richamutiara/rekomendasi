@@ -7,57 +7,47 @@ import { useNavigate } from "react-router-dom";
 import vespaImage from "../../assets/vespa.jpg";
 import { db } from "../../../firebase";
 
-const SET_PRICE = "SET_PRICE";
-const SET_FACILITY = "SET_FACILITY";
-const SET_LOCATION = "SET_LOCATION";
-
-function returnParsedIntObj(obj) {
-  const res = {};
-
-  for (const [key, value] of Object.entries(obj)) {
-    res[key] = Number(value);
-  }
-
-  return res;
-}
+const SET_FIRST = "SET_PRICE";
+const SET_SECOND = "SET_FACILITY";
+const SET_THIRD = "SET_LOCATION";
 
 const initialPriorityState = {
-  price: "",
-  facility: "",
-  location: "",
+  first: "",
+  second: "",
+  third: "",
 };
 
 function priorityReducer(draft, action) {
   const { payload } = action;
   switch (action.type) {
-    case SET_PRICE: {
-      if (draft.facility === payload) {
-        draft.facility = "";
+    case SET_FIRST: {
+      if (draft.second === payload) {
+        draft.second = "";
       }
-      if (draft.location === payload) {
-        draft.location = "";
+      if (draft.third === payload) {
+        draft.third = "";
       }
-      draft.price = payload;
+      draft.first = payload;
       break;
     }
-    case SET_FACILITY: {
-      if (draft.price === payload) {
-        draft.price = "";
+    case SET_SECOND: {
+      if (draft.first === payload) {
+        draft.first = "";
       }
-      if (draft.location === payload) {
-        draft.location = "";
+      if (draft.third === payload) {
+        draft.third = "";
       }
-      draft.facility = payload;
+      draft.second = payload;
       break;
     }
-    case SET_LOCATION: {
-      if (draft.price === payload) {
-        draft.price = "";
+    case SET_THIRD: {
+      if (draft.first === payload) {
+        draft.first = "";
       }
-      if (draft.facility === payload) {
-        draft.facility = "";
+      if (draft.second === payload) {
+        draft.second = "";
       }
-      draft.location = payload;
+      draft.third = payload;
       break;
     }
     default: {
@@ -93,12 +83,39 @@ async function getRentalData({ priceLimit, location, facility }) {
 }
 
 function countCriteria(priorities) {
-  const parsedPriorities = returnParsedIntObj(priorities);
-  const {
-    price: ahpPrice,
-    facility: ahpFacility,
-    location: ahpLocation,
-  } = parsedPriorities;
+  let ahpPrice;
+  let ahpFacility;
+  let ahpLocation;
+
+  if (priorities.first === "Harga") {
+    ahpPrice = 9;
+  }
+  if (priorities.first === "Fasilitas") {
+    ahpFacility = 9;
+  }
+  if (priorities.first === "Lokasi") {
+    ahpLocation = 9;
+  }
+
+  if (priorities.second === "Harga") {
+    ahpPrice = 5;
+  }
+  if (priorities.second === "Fasilitas") {
+    ahpFacility = 5;
+  }
+  if (priorities.second === "Lokasi") {
+    ahpLocation = 5;
+  }
+
+  if (priorities.third === "Harga") {
+    ahpPrice = 3;
+  }
+  if (priorities.third === "Fasilitas") {
+    ahpFacility = 3;
+  }
+  if (priorities.third === "Lokasi") {
+    ahpLocation = 3;
+  }
 
   const matrix = [
     [1, ahpPrice / ahpFacility, ahpPrice / ahpLocation],
@@ -202,9 +219,9 @@ function OptionPage() {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (
-      !priorities.price ||
-      !priorities.facility ||
-      !priorities.location ||
+      !priorities.first ||
+      !priorities.second ||
+      !priorities.third ||
       !price
     ) {
       // eslint-disable-next-line no-alert
@@ -267,31 +284,29 @@ function OptionPage() {
     );
 
     finalData.sort((dataA, dataB) => dataB.rankingWeight - dataA.rankingWeight);
+
     navigate("search-results", {
       state: finalData,
     });
   };
 
-  const priorityList = useMemo(
-    () => ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    []
-  );
+  const priorityList = useMemo(() => ["Harga", "Fasilitas", "Lokasi"], []);
 
   const handleFirstPrio = (e) => {
     dispatch({
-      type: SET_PRICE,
+      type: SET_FIRST,
       payload: e?.target.value,
     });
   };
   const handleSecondPrio = (e) => {
     dispatch({
-      type: SET_FACILITY,
+      type: SET_SECOND,
       payload: e?.target.value,
     });
   };
   const handleThirdPrio = (e) => {
     dispatch({
-      type: SET_LOCATION,
+      type: SET_THIRD,
       payload: e?.target.value,
     });
   };
@@ -301,13 +316,13 @@ function OptionPage() {
       <Row>
         <div className="p-5 gap-4 d-flex justify-content-center">
           <Form.Group className="mb-2">
-            <Form.Label>Harga</Form.Label>
+            <Form.Label>Prioritas Utama</Form.Label>
             <Form.Select
               aria-label="Nilai Harga"
               onChange={handleFirstPrio}
               value={priorities.one}
             >
-              <option value="">Pilih Nilai Prioritas</option>
+              <option value="">Pilih Prioritas Utama</option>
               {priorityList.map((priority) => (
                 <option value={priority} key={priority}>
                   {priority}
@@ -316,15 +331,15 @@ function OptionPage() {
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-2">
-            <Form.Label>Fasilitas</Form.Label>
+            <Form.Label>Prioritas Kedua</Form.Label>
             <Form.Select
               aria-label="Nilai Fasilitas"
               onChange={handleSecondPrio}
               value={priorities.two}
             >
-              <option value="">Pilih Nilai Prioritas</option>
+              <option value="">Pilih Prioritas Kedua</option>
               {priorityList
-                .filter((priority) => priority !== priorities.price)
+                .filter((priority) => priority !== priorities.first)
                 .map((priority) => (
                   <option key={priority} value={priority}>
                     {priority}
@@ -333,18 +348,18 @@ function OptionPage() {
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-2">
-            <Form.Label>Lokasi</Form.Label>
+            <Form.Label>Prioritas Terakhir</Form.Label>
             <Form.Select
               value={priorities.three}
               aria-label="Nilai Lokasi"
               onChange={handleThirdPrio}
             >
-              <option value="">Pilih Nilai Prioritas</option>
+              <option value="">Pilih Prioritas Terakhir</option>
               {priorityList
                 .filter(
                   (priority) =>
-                    priority !== priorities.price &&
-                    priority !== priorities.facility
+                    priority !== priorities.first &&
+                    priority !== priorities.second
                 )
                 .map((priority) => (
                   <option key={priority} value={priority}>
