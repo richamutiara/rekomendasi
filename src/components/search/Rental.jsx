@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+import vespaImg from "../../assets/vespa.jpg";
 
 export default function Rental({ rental }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Rental({ rental }) {
               objectFit: "cover",
             }}
             variant="top"
-            src={rental.images[0]}
+            src={rental.images ? rental.images[0] : vespaImg}
           />
         </Card>
       </Col>

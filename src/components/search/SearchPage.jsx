@@ -15,7 +15,7 @@ function SearchPage() {
       <Row>
         <div className="d-flex flex-column mb-3 align-items-center justify-content-center min-vh-100">
           {state.map((rentalData) => (
-            <Rental rental={rentalData} />
+            <Rental key={rentalData.id} rental={rentalData} />
           ))}
         </div>
       </Row>

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { detailCard, detail } from "./DetailPage.module.css";
 import { db } from "../../../firebase";
+import vespaImg from "../../assets/vespa.jpg";
 
 function DetailPage() {
   const { id } = useParams();
@@ -18,7 +19,6 @@ function DetailPage() {
       try {
         const docSnap = await getDoc(docRef);
         setRentalData(docSnap.data());
-        console.log(docSnap.data());
       } catch (error) {
         // eslint-disable-next-line no-alert
         alert(error.message);
@@ -37,18 +37,31 @@ function DetailPage() {
     <div className={detailCard}>
       <h1>{rentalData?.name}</h1>
       <Carousel fade>
-        {rentalData?.images.map((image) => (
-          <CarouselItem key={image}>
+        {rentalData?.images ? (
+          rentalData.images.map((image) => (
+            <CarouselItem key={image}>
+              <div style={{ margin: "10px", height: "260px" }}>
+                <Card.Img
+                  variant="top"
+                  src={image}
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            </CarouselItem>
+          ))
+        ) : (
+          <CarouselItem>
             <div style={{ margin: "10px", height: "260px" }}>
               <Card.Img
                 variant="top"
-                src={image}
+                src={vespaImg}
                 style={{ objectFit: "cover" }}
               />
             </div>
           </CarouselItem>
-        ))}
+        )}
       </Carousel>
+
       <section className={detail}>
         <address>Lokasi: {rentalData.location}</address>
         <address>{rentalData.address}</address>
